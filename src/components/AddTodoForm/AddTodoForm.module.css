@@ -1,0 +1,10 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.input {
+}
+.label{
+  margin-bottom: 15px;
+}
