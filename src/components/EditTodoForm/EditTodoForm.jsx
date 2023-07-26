@@ -27,7 +27,10 @@ function EditTodoForm({ updateTodo, items, idTodo, categorySelect }) {
         setContentEdit(value);
         break;
       case "date":
-        setDateEdit(value);
+        const [year, month, day] = value.split("-");
+        setDateEdit((prevState) => {
+          return [...prevState, `${day}.${month}.${year}`];
+        });
         break;
       default:
     }
@@ -97,7 +100,9 @@ function EditTodoForm({ updateTodo, items, idTodo, categorySelect }) {
           className={s.input}
           id="date"
           name="date"
-          value={dateEdit}
+          type="date"
+          min={`1930-01-01`}
+          max={`3000-12-31`}
         />
       </label>
       <button className={s.btn} type="submit">

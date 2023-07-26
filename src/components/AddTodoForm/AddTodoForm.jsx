@@ -6,9 +6,9 @@ function AddTodoForm({ createTodo, categorySelect }) {
   const [created, setCreated] = useState("");
   const [category, setCategory] = useState("");
   const [content, setContent] = useState("");
-  const [date, setDate] = useState("");
-  const [archive, setArchive] = useState("");
-  const [edit, setEdit] = useState("");
+  const [date, setDate] = useState([]);
+  const [archive, setArchive] = useState(Boolean);
+  const [edit, setEdit] = useState(Boolean);
 
   const handlerChange = (e) => {
     const { name, value } = e.target;
@@ -26,7 +26,8 @@ function AddTodoForm({ createTodo, categorySelect }) {
         setContent(value);
         break;
       case "date":
-        setDate(value);
+        const [year, month, day] = value.split("-");
+        setDate([`${day}.${month}.${year}`]);
         break;
       case "archive":
         setArchive(value);
@@ -37,6 +38,7 @@ function AddTodoForm({ createTodo, categorySelect }) {
       default:
     }
   };
+
   return (
     <form
       onSubmit={(e) =>
@@ -71,7 +73,14 @@ function AddTodoForm({ createTodo, categorySelect }) {
       </label>
       <label className={s.label}>
         <p>Date</p>
-        <input className={s.input} id="date" name="date" />
+        <input
+          className={s.input}
+          id="date"
+          name="date"
+          type="date"
+          min={`1930-01-01`}
+          max={`3000-12-31`}
+        />
       </label>
       <button className={s.btn} type="submit">
         Submit

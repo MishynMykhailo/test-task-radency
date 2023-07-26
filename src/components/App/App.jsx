@@ -8,6 +8,7 @@ import { nanoid } from "nanoid";
 function App() {
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState(null);
+  const [drawArchiveTodo, setDrawArchiveTodo] = useState(false);
   const categorySelect = ["Task", "Random Thought", "Idea"];
 
   const [items, setItems] = useState([
@@ -17,7 +18,7 @@ function App() {
       created: "APril 20",
       category: "Task",
       content: "tomatos",
-      date: "date",
+      date: [],
       archive: true,
       edit: "false",
       deleteTodo: "false",
@@ -28,7 +29,7 @@ function App() {
       created: "APril 20",
       category: "Task",
       content: "drink",
-      date: "date",
+      date: [],
       archive: false,
       edit: "false",
       deleteTodo: "false",
@@ -39,7 +40,7 @@ function App() {
       created: "APril 20",
       category: "Task",
       content: "tomatos",
-      date: "date",
+      date: [],
       archive: false,
       edit: "false",
       deleteTodo: "false",
@@ -69,14 +70,18 @@ function App() {
     toggleModal();
   };
   const deleteTodo = (e) => {
-    e.preventDefault();
     setItems((prevState) => {
       return prevState.filter(({ id }) => e !== id);
     });
   };
+
+  const filterArchiveTodo = () => {
+    setDrawArchiveTodo((prevState) => !prevState);
+  };
+
   const updateTodo = (
     e,
-    { nameEdit, createdEdit, categoryEdit, contentEdit, idTodo }
+    { nameEdit, createdEdit, categoryEdit, contentEdit, dateEdit, idTodo }
   ) => {
     e.preventDefault();
     setItems((prevState) => {
@@ -88,6 +93,7 @@ function App() {
             created: createdEdit,
             category: categoryEdit,
             content: contentEdit,
+            date: dateEdit,
           };
         }
         return todo;
@@ -131,6 +137,8 @@ function App() {
           modalContent={modalContent}
           categorySelect={categorySelect}
           toggleArchive={toggleArchive}
+          filterArchiveTodo={filterArchiveTodo}
+          drawArchiveTodo={drawArchiveTodo}
         />
       </div>
       <div>
