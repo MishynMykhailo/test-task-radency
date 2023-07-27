@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/test-task-radency/static/css/main.60c79879.css",
+    "main.js": "/test-task-radency/static/js/main.ee8c0acf.js",
+    "index.html": "/test-task-radency/index.html",
+    "static/media/trophy.svg": "/test-task-radency/static/media/trophy.68fac7f0ff537cbb979ce9de9d521062.svg",
+    "static/media/case.svg": "/test-task-radency/static/media/case.c7168978e634b7f1915893d55d4c6cb1.svg",
+    "static/media/delete.svg": "/test-task-radency/static/media/delete.42b2a3dbb0c75a5117bfe568e27a01f7.svg",
+    "static/media/add.svg": "/test-task-radency/static/media/add.b86f8d5d403fd22609e4d130c161c41e.svg",
+    "static/media/edit.svg": "/test-task-radency/static/media/edit.965120e015b1324b3b55b232ae49f0e1.svg",
+    "static/media/idea.svg": "/test-task-radency/static/media/idea.e13cafeb4124203c48b84ab5ef9dd641.svg",
+    "static/media/archive.svg": "/test-task-radency/static/media/archive.994da31e0d0a8ccae01512cf3ce5d1f1.svg",
+    "main.60c79879.css.map": "/test-task-radency/static/css/main.60c79879.css.map",
+    "main.ee8c0acf.js.map": "/test-task-radency/static/js/main.ee8c0acf.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.60c79879.css",
+    "static/js/main.ee8c0acf.js"
+  ]
+}
