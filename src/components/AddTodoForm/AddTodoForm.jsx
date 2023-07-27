@@ -3,21 +3,18 @@ import s from "./AddTodoForm.module.css";
 
 function AddTodoForm({ createTodo, categorySelect }) {
   const [name, setName] = useState("");
-  const [created, setCreated] = useState("");
   const [category, setCategory] = useState("");
   const [content, setContent] = useState("");
   const [date, setDate] = useState([]);
   const [archive, setArchive] = useState(Boolean);
   const [edit, setEdit] = useState(Boolean);
 
+  // Change input in form
   const handlerChange = (e) => {
     const { name, value } = e.target;
     switch (name) {
       case "name":
         setName(value);
-        break;
-      case "created":
-        setCreated(value);
         break;
       case "category":
         setCategory(value);
@@ -27,7 +24,7 @@ function AddTodoForm({ createTodo, categorySelect }) {
         break;
       case "date":
         const [year, month, day] = value.split("-");
-        setDate([`${day}.${month}.${year}`]);
+        setDate([`${day}/${month}/${year}`]);
         break;
       case "archive":
         setArchive(value);
@@ -42,22 +39,34 @@ function AddTodoForm({ createTodo, categorySelect }) {
   return (
     <form
       onSubmit={(e) =>
-        createTodo(e, { name, created, category, content, date, archive, edit })
+        createTodo(e, { name, category, content, date, archive, edit })
       }
       onChange={(e) => handlerChange(e)}
       className={s.form}
     >
       <label className={s.label}>
         <p>Name</p>
-        <input className={s.input} id="name" name="name" />
+        <input
+          className={s.input}
+          id="name"
+          name="name"
+          required
+          placeholder="Name"
+        />
       </label>
-      <label className={s.label}>
-        <p>Created</p>
-        <input className={s.input} id="created" name="created" />
-      </label>
+
       <label className={s.label}>
         <p>Category</p>
-        <select className={s.input} id="category" name="category">
+        <select
+          className={s.input}
+          id="category"
+          name="category"
+          required
+          defaultValue="def"
+        >
+          <option value="def" disabled>
+            Choose your category
+          </option>
           {categorySelect.map((e) => {
             return (
               <option key={e} value={e}>
@@ -69,7 +78,12 @@ function AddTodoForm({ createTodo, categorySelect }) {
       </label>
       <label className={s.label}>
         <p>Content</p>
-        <input className={s.input} id="content" name="content" />
+        <input
+          className={s.input}
+          id="content"
+          name="content"
+          placeholder="Description"
+        />
       </label>
       <label className={s.label}>
         <p>Date</p>

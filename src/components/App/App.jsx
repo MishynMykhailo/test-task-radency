@@ -1,21 +1,20 @@
 import { useState } from "react";
 import Header from "../Header/Header.jsx";
 import Modal from "../Modal/Modal";
-import s from "./App.module.css";
 import StatisticsTodo from "../StatisticsTodo/StatisticsTodo.jsx";
 import { nanoid } from "nanoid";
+import Container from "../Container/Container.jsx";
 
 function App() {
   const [showModal, setShowModal] = useState(false);
   const [modalContent, setModalContent] = useState(null);
   const [drawArchiveTodo, setDrawArchiveTodo] = useState(false);
   const categorySelect = ["Task", "Random Thought", "Idea"];
-
   const [items, setItems] = useState([
     {
       id: 1,
       name: "Shopping List",
-      created: "APril 20",
+      created: "27.07.2023, 03:34:51",
       category: "Task",
       content: "tomatos",
       date: [],
@@ -26,7 +25,7 @@ function App() {
     {
       id: 2,
       name: "The teory evolute",
-      created: "APril 20",
+      created: "27.07.2023, 03:35:51",
       category: "Task",
       content: "drink",
       date: [],
@@ -36,64 +35,87 @@ function App() {
     },
     {
       id: 3,
-      name: "book it ",
-      created: "APril 20",
-      category: "Task",
-      content: "tomatos",
+      name: "New Test",
+      created: "27.07.2023, 03:33:51",
+      category: "Idea",
+      content: "tomatosasdlm",
       date: [],
       archive: false,
       edit: "false",
       deleteTodo: "false",
     },
+    {
+      id: "L72_R_aFUBIfIzrq6CgO5",
+      name: "test task1",
+      created: "27.07.2023, 03:32:52",
+      category: "Random Thought",
+      content: "empty",
+      date: [],
+      archive: false,
+      edit: false,
+    },
+    {
+      id: "bDJKttxUZELllczsD5CJt",
+      name: "Radency test 1",
+      created: "27.07.2023, 03:34:26",
+      category: "Idea",
+      content: "Radency test 1",
+      date: ["29/07/2023"],
+      archive: false,
+      edit: false,
+    },
+    {
+      id: "GAqq2zh3DFScs3xxxH-JY",
+      name: "Finished ths task",
+      created: "27.07.2023, 03:34:23",
+      category: "Random Thought",
+      content: "test",
+      date: ["01/07/2023", "02/07/2023"],
+      archive: false,
+      edit: false,
+    },
+    {
+      id: "GAqq2zh3DFSc232322-JY",
+      name: "Last Todo for this task",
+      created: "27.07.2023, 03:34:23",
+      category: "Random Thought",
+      content: "test",
+      date: ["02/07/2023", "06/07/2023"],
+      archive: false,
+      edit: false,
+    },
   ]);
-
-  const createTodo = (
-    e,
-    { name, created, category, content, date, archive, edit }
-  ) => {
+  // Create Todo
+  const createTodo = (e, formData) => {
     e.preventDefault();
     setItems((prevState) => {
       return [
         ...prevState,
         {
           id: nanoid(),
-          name,
-          created,
-          category,
-          content,
-          date,
-          archive,
-          edit,
+          created: new Date().toLocaleString(),
+          ...formData,
         },
       ];
     });
     toggleModal();
   };
-  const deleteTodo = (e) => {
+  // Delete Todo
+  const deleteTodo = (id) => {
     setItems((prevState) => {
-      return prevState.filter(({ id }) => e !== id);
+      return prevState.filter((todo) => todo.id !== id);
     });
   };
-
-  const filterArchiveTodo = () => {
-    setDrawArchiveTodo((prevState) => !prevState);
-  };
-
-  const updateTodo = (
-    e,
-    { nameEdit, createdEdit, categoryEdit, contentEdit, dateEdit, idTodo }
-  ) => {
+  //  Update TODO
+  const updateTodo = (e, formData) => {
     e.preventDefault();
     setItems((prevState) => {
       return prevState.map((todo) => {
-        if (todo.id === idTodo) {
+        if (todo.id === formData.idTodo) {
           return {
             ...todo,
-            name: nameEdit,
-            created: createdEdit,
-            category: categoryEdit,
-            content: contentEdit,
-            date: dateEdit,
+            created: new Date().toLocaleString(),
+            ...formData,
           };
         }
         return todo;
@@ -101,9 +123,13 @@ function App() {
     });
     toggleModal();
   };
-
+  // Show/Close Modal
   const toggleModal = () => {
     setShowModal((prevState) => !prevState);
+  };
+  //  Archive page
+  const filterArchiveTodo = () => {
+    setDrawArchiveTodo((prevState) => !prevState);
   };
 
   const toggleArchive = (id) => {
@@ -124,26 +150,24 @@ function App() {
     setModalContent(content);
     toggleModal();
   };
+
   return (
     <>
-      <div className={s.App}>
+      <Container>
         <Header
           createTodo={createTodo}
           deleteTodo={deleteTodo}
           updateTodo={updateTodo}
           items={items}
-          toggleModal={() => toggleModal()}
+          toggleModal={toggleModal}
           openModal={openModal}
-          modalContent={modalContent}
           categorySelect={categorySelect}
           toggleArchive={toggleArchive}
           filterArchiveTodo={filterArchiveTodo}
           drawArchiveTodo={drawArchiveTodo}
         />
-      </div>
-      <div>
         <StatisticsTodo items={items} categorySelect={categorySelect} />
-      </div>
+      </Container>
       <Modal showModal={showModal} toggleModal={toggleModal}>
         {modalContent}
       </Modal>

@@ -1,0 +1,23 @@
+.thead {
+  background-color: #222222;
+  border: 1px solid #222222;
+
+  color: white;
+}
+
+.th {
+  padding: 15px;
+}
+
+.td {
+  background-color: rgb(165, 165, 165);
+  text-align: center;
+  padding: 10px;
+  border: 1px solid #222222;
+}
+.th:first-child {
+  border-top-left-radius: 10px;
+}
+.th:last-child {
+  border-top-right-radius: 10px;
+}

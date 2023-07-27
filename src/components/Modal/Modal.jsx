@@ -16,7 +16,6 @@ export default function Modal({ children, showModal, toggleModal }) {
               >
                 {children}
               </div>
-              <button>Close</button>
             </div>
           </>,
           document.body

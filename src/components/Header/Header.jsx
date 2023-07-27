@@ -1,8 +1,8 @@
 import React from "react";
 import s from "./Header.module.css";
 import AddTodoForm from "../AddTodoForm/AddTodoForm";
-import EditTodoForm from "../EditTodoForm/EditTodoForm";
-import { Archive, Delete, Edit } from "../../images";
+import { Archive, Case, Delete, Edit, Idea, Trophy } from "../../images";
+import TodoList from "../TodoList/TodoList";
 
 function Header({
   openModal,
@@ -15,178 +15,77 @@ function Header({
   filterArchiveTodo,
   drawArchiveTodo,
 }) {
+  const todoImage = (category) => {
+    if (category === "Task") {
+      return <Case />;
+    } else if (category === "Random Thought") {
+      return <Idea />;
+    } else {
+      return <Trophy />;
+    }
+  };
+  const archiveItems = items.filter(({ archive }) => archive !== false);
+  const notArchiveItems = items.filter(({ archive }) => archive !== true);
   return (
     <>
       <div className={s.div}>
         <div>
+          <h1>{drawArchiveTodo ? "Archive" : "MainTodo"}</h1>
           <table className={s.table}>
-            <thead className={s.thead}>
-              <tr>
-                <th>Name</th>
-                <th>Created</th>
-                <th>Category</th>
-                <th>Content</th>
-                <th>Dates</th>
-                <th>
+            <thead className={drawArchiveTodo ? s.theadMain : s.theadArchive}>
+              <tr className={s.tr}>
+                <th className={s.th}>Name</th>
+                <th className={s.th}>Created</th>
+                <th className={s.th}>Category</th>
+                <th className={s.th}>Content</th>
+                <th className={s.th}>Dates</th>
+                <th className={s.th}>
                   <Edit />
                 </th>
-                <th>
+                <th className={s.th}>
                   <Archive />
                 </th>
-                <th>
+                <th className={s.th}>
                   <Delete />
                 </th>
               </tr>
             </thead>
             <tbody>
-              {drawArchiveTodo
-                ? items.map(
-                    ({
-                      id,
-                      name,
-                      created,
-                      category,
-                      content,
-                      archive,
-                      date,
-                    }) => {
-                      if (archive) {
-                        return (
-                          <tr key={id}>
-                            <td>{name}</td>
-                            <td>{created}</td>
-                            <td>{category}</td>
-                            <td>{content}</td>
-                            <td>
-                              <select value={date[date.length - 1]} readOnly>
-                                {date
-                                  .slice()
-                                  .reverse()
-                                  .map((date) => (
-                                    <option key={date}>{date}</option>
-                                  ))}
-                              </select>
-                            </td>
-                            <td>
-                              <button
-                                type="button"
-                                className={s.btnEdit}
-                                onClick={() =>
-                                  openModal(
-                                    <EditTodoForm
-                                      updateTodo={updateTodo}
-                                      items={items}
-                                      idTodo={id}
-                                      categorySelect={categorySelect}
-                                    />
-                                  )
-                                }
-                              >
-                                edit
-                              </button>
-                            </td>
-                            <td>
-                              <button
-                                type="button"
-                                className={s.btnEdit}
-                                onClick={() => toggleArchive(id)}
-                              >
-                                archive
-                              </button>
-                            </td>
-                            <td>
-                              <button
-                                type="button"
-                                className={s.btnDelete}
-                                onClick={() => deleteTodo(id)}
-                              >
-                                Delete
-                              </button>
-                            </td>
-                          </tr>
-                        );
-                      }
-                      return "";
-                    }
-                  )
-                : items.map((e) => {
-                    if (!e.archive) {
-                      return (
-                        <tr key={e.id}>
-                          <td>{e.name}</td>
-                          <td>{e.created}</td>
-                          <td>{e.category}</td>
-                          <td>{e.content}</td>
-                          <td>
-                            <select value={e.date[e.date.length - 1]} readOnly>
-                              {e.date
-                                .slice()
-                                .reverse()
-                                .map((date) => (
-                                  <option key={date}>{date}</option>
-                                ))}
-                            </select>
-                          </td>
-                          <td>
-                            <button
-                              type="button"
-                              className={s.btnEdit}
-                              onClick={() =>
-                                openModal(
-                                  <EditTodoForm
-                                    updateTodo={updateTodo}
-                                    items={items}
-                                    idTodo={e.id}
-                                    categorySelect={categorySelect}
-                                  />
-                                )
-                              }
-                            >
-                              edit
-                            </button>
-                          </td>
-                          <td>
-                            <button
-                              type="button"
-                              className={s.btnEdit}
-                              onClick={() => toggleArchive(e.id)}
-                            >
-                              archive
-                            </button>
-                          </td>
-                          <td>
-                            <button
-                              type="button"
-                              className={s.btnDelete}
-                              onClick={() => deleteTodo(e.id)}
-                            >
-                              Delete
-                            </button>
-                          </td>
-                        </tr>
-                      );
-                    }
-                    return "";
-                  })}
-            </tbody>
-          </table>
-        </div>
-        <button
-          type="button"
-          onClick={() =>
-            openModal(
-              <AddTodoForm
-                createTodo={createTodo}
+              <TodoList
+                items={drawArchiveTodo ? archiveItems : notArchiveItems}
+                todoImage={todoImage}
+                openModal={openModal}
+                toggleArchive={toggleArchive}
+                deleteTodo={deleteTodo}
+                updateTodo={updateTodo}
                 categorySelect={categorySelect}
               />
-            )
-          }
-        >
-          create new note
-        </button>
-        <button type="button" onClick={() => filterArchiveTodo()}>
-          open archive
-        </button>
+            </tbody>
+          </table>
+          <div className={s.btnContainer}>
+            <button
+              className={s.btnOpen}
+              type="button"
+              onClick={() =>
+                openModal(
+                  <AddTodoForm
+                    createTodo={createTodo}
+                    categorySelect={categorySelect}
+                  />
+                )
+              }
+            >
+              create new note
+            </button>
+            <button
+              className={s.btnOpen}
+              type="button"
+              onClick={() => filterArchiveTodo()}
+            >
+              open archive
+            </button>
+          </div>
+        </div>
       </div>
     </>
   );

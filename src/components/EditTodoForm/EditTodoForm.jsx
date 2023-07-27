@@ -2,11 +2,10 @@ import React, { useState } from "react";
 import s from "./EditTodoForm.module.css";
 
 function EditTodoForm({ updateTodo, items, idTodo, categorySelect }) {
-  const { name, created, category, content, date } = items.find(
+  const { name, category, content, date } = items.find(
     ({ id }) => id === idTodo
   );
   const [nameEdit, setNameEdit] = useState(name);
-  const [createdEdit, setCreatedEdit] = useState(created);
   const [categoryEdit, setCategoryEdit] = useState(category);
   const [contentEdit, setContentEdit] = useState(content);
   const [dateEdit, setDateEdit] = useState(date);
@@ -17,10 +16,8 @@ function EditTodoForm({ updateTodo, items, idTodo, categorySelect }) {
       case "name":
         setNameEdit(value);
         break;
-      case "created":
-        setCreatedEdit(value);
-        break;
       case "category":
+        console.log(category);
         setCategoryEdit(value);
         break;
       case "content":
@@ -29,7 +26,7 @@ function EditTodoForm({ updateTodo, items, idTodo, categorySelect }) {
       case "date":
         const [year, month, day] = value.split("-");
         setDateEdit((prevState) => {
-          return [...prevState, `${day}.${month}.${year}`];
+          return [...prevState, `${day}/${month}/${year}`];
         });
         break;
       default:
@@ -40,7 +37,6 @@ function EditTodoForm({ updateTodo, items, idTodo, categorySelect }) {
       onSubmit={(e) => {
         updateTodo(e, {
           nameEdit,
-          createdEdit,
           categoryEdit,
           contentEdit,
           dateEdit,
@@ -57,30 +53,31 @@ function EditTodoForm({ updateTodo, items, idTodo, categorySelect }) {
           id="name"
           name="name"
           value={nameEdit}
+          placeholder="Name"
+          required
         />
       </label>
-      <label className={s.label}>
-        <p>Created</p>
-        <input
-          onChange={(e) => handlerChange(e)}
-          className={s.input}
-          id="created"
-          name="created"
-          value={createdEdit}
-        />
-      </label>
+
       <label className={s.label}>
         <p>Category</p>
         <select
           className={s.input}
           id="category"
           name="category"
-          defaultValue={categoryEdit}
           onChange={(e) => handlerChange(e)}
+          required
+          defaultValue="def"
         >
-          <option value="Task">Task</option>
-          <option value="Random Thought">Random Thought</option>
-          <option value="Idea">Idea</option>
+          <option value="def" disabled>
+            Choose your category
+          </option>
+          {categorySelect.map((e) => {
+            return (
+              <option key={e} value={e} readOnly>
+                {e}
+              </option>
+            );
+          })}
         </select>
       </label>
       <label className={s.label}>
@@ -91,6 +88,7 @@ function EditTodoForm({ updateTodo, items, idTodo, categorySelect }) {
           id="content"
           name="content"
           value={contentEdit}
+          placeholder="Description"
         />
       </label>
       <label className={s.label}>
@@ -106,7 +104,7 @@ function EditTodoForm({ updateTodo, items, idTodo, categorySelect }) {
         />
       </label>
       <button className={s.btn} type="submit">
-        Submit
+        Edit todo
       </button>
     </form>
   );
