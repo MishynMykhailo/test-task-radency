@@ -2,6 +2,7 @@
   "name": "test-task-radency",
   "version": "0.1.0",
   "author": "Mishyn Mykhailo <misham18092001@gmail.com>",
+  "homepage": "https://mishynmykhailo.github.io/test-task-radency/",
   "license": "ISC",
   "private": true,
   "dependencies": {
