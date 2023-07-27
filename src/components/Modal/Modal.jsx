@@ -1,14 +1,20 @@
 import { createPortal } from "react-dom";
+import { useDispatch, useSelector } from "react-redux";
 import s from "./Modal.module.css";
-export default function Modal({ children, showModal, toggleModal }) {
+import { toggleModal } from "../../redux/modalSlice";
+import { getModalValueState } from "../../redux/selectors";
+
+export default function Modal({ children }) {
+  const { modalActive } = useSelector(getModalValueState);
+  const dispatch = useDispatch();
   return (
     <>
-      {showModal &&
+      {modalActive &&
         createPortal(
           <>
             <div
-              className={showModal ? s.modalActive : s.modalClosed}
-              onClick={() => toggleModal()}
+              className={modalActive ? s.modalActive : s.modalClosed}
+              onClick={() => dispatch(toggleModal())}
             >
               <div
                 className={s.modal__content}

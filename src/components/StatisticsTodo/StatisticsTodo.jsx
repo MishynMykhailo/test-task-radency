@@ -1,7 +1,14 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import s from "./StatisticsTodo.module.css";
+import {
+  getCategorySelectValueState,
+  getTodoValueState,
+} from "../../redux/selectors";
 
-function StatisticsTodo({ items, categorySelect }) {
+function StatisticsTodo() {
+  const { items } = useSelector(getTodoValueState);
+  const { categoryList } = useSelector(getCategorySelectValueState);
   return (
     <table className={s.table}>
       <thead className={s.thead}>
@@ -13,7 +20,7 @@ function StatisticsTodo({ items, categorySelect }) {
       </thead>
       <tbody>
         {items &&
-          categorySelect.map((el) => {
+          categoryList.map((el) => {
             const filteredItems = items.filter((item) => item.category === el);
             return (
               <tr key={el} className={s.tr}>

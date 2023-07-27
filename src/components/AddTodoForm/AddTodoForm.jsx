@@ -1,14 +1,28 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Notify } from "notiflix/build/notiflix-notify-aio";
 import s from "./AddTodoForm.module.css";
+import { getCategorySelectValueState } from "../../redux/selectors";
+import { addTodo } from "../../redux/todoSlice";
+import { toggleModal } from "../../redux/modalSlice";
 
-function AddTodoForm({ createTodo, categorySelect }) {
+Notify.init({
+  width: "300px",
+  position: "right-bottom",
+  closeButton: false,
+  clickToClose: true,
+  timeout: 2000,
+});
+
+function AddTodoForm() {
+  const { categoryList } = useSelector(getCategorySelectValueState);
+  const dispatch = useDispatch();
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
   const [content, setContent] = useState("");
   const [date, setDate] = useState([]);
   const [archive, setArchive] = useState(Boolean);
   const [edit, setEdit] = useState(Boolean);
-
   // Change input in form
   const handlerChange = (e) => {
     const { name, value } = e.target;
@@ -36,11 +50,23 @@ function AddTodoForm({ createTodo, categorySelect }) {
     }
   };
 
+  const validForm = ({ name, category }) => {
+    if (name.length <= 0) {
+      return Notify.failure("fill in the field 'Name'");
+    } else if (category.length <= 0) {
+      return Notify.failure("fill in the field 'Category'");
+    } else {
+      dispatch(addTodo({ name, category, content, date, archive, edit }));
+      dispatch(toggleModal());
+    }
+  };
+  
   return (
     <form
-      onSubmit={(e) =>
-        createTodo(e, { name, category, content, date, archive, edit })
-      }
+      onSubmit={(e) => {
+        e.preventDefault();
+        validForm({ name, category, content });
+      }}
       onChange={(e) => handlerChange(e)}
       className={s.form}
     >
@@ -67,7 +93,7 @@ function AddTodoForm({ createTodo, categorySelect }) {
           <option value="def" disabled>
             Choose your category
           </option>
-          {categorySelect.map((e) => {
+          {categoryList.map((e) => {
             return (
               <option key={e} value={e}>
                 {e}

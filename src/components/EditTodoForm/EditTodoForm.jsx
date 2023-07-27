@@ -1,10 +1,20 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import s from "./EditTodoForm.module.css";
+import { updateTodo } from "../../redux/todoSlice";
+import {
+  getCategorySelectValueState,
+  getTodoValueState,
+} from "../../redux/selectors";
+import { toggleModal } from "../../redux/modalSlice";
 
-function EditTodoForm({ updateTodo, items, idTodo, categorySelect }) {
-  const { name, category, content, date } = items.find(
+function EditTodoForm({ idTodo }) {
+  const { items } = useSelector(getTodoValueState);
+  const { categoryList } = useSelector(getCategorySelectValueState);
+  const { name, category, content, date, id } = items.find(
     ({ id }) => id === idTodo
   );
+  const dispatch = useDispatch();
   const [nameEdit, setNameEdit] = useState(name);
   const [categoryEdit, setCategoryEdit] = useState(category);
   const [contentEdit, setContentEdit] = useState(content);
@@ -35,13 +45,17 @@ function EditTodoForm({ updateTodo, items, idTodo, categorySelect }) {
   return (
     <form
       onSubmit={(e) => {
-        updateTodo(e, {
-          nameEdit,
-          categoryEdit,
-          contentEdit,
-          dateEdit,
-          idTodo,
-        });
+        e.preventDefault();
+        dispatch(
+          updateTodo({
+            id,
+            nameEdit,
+            categoryEdit,
+            contentEdit,
+            dateEdit,
+          })
+        );
+        dispatch(toggleModal());
       }}
       className={s.form}
     >
@@ -71,7 +85,7 @@ function EditTodoForm({ updateTodo, items, idTodo, categorySelect }) {
           <option value="def" disabled>
             Choose your category
           </option>
-          {categorySelect.map((e) => {
+          {categoryList.map((e) => {
             return (
               <option key={e} value={e} readOnly>
                 {e}
