@@ -1,3 +1,5 @@
+// Header.tsx
+
 import React, { ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import s from "./Header.module.css";
@@ -51,6 +53,7 @@ const Header: React.FC<IProps> = ({ setContentModal }) => {
               </tr>
             </thead>
             <tbody>
+              {/* Разложите элементы из TodoList с помощью оператора ... */}
               <TodoList
                 todoImage={todoImage}
                 setContentModal={setContentModal}
