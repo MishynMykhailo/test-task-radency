@@ -6,9 +6,20 @@ import {
   getTodoValueState,
 } from "../../redux/selectors";
 
+interface TodoItem {
+  id: string;
+  name: string;
+  created: string;
+  category: string;
+  content: string;
+  date: string[];
+  archive: boolean;
+}
+
 function StatisticsTodo() {
   const { items } = useSelector(getTodoValueState);
   const { categoryList } = useSelector(getCategorySelectValueState);
+
   return (
     <table className={s.table}>
       <thead className={s.thead}>
@@ -20,20 +31,24 @@ function StatisticsTodo() {
       </thead>
       <tbody>
         {items &&
-          categoryList.map((el) => {
-            const filteredItems = items.filter((item) => item.category === el);
+          categoryList.map((category: string) => {
+            const filteredItems = items.filter(
+              (item: TodoItem) => item.category === category
+            );
             return (
-              <tr key={el} className={s.tr}>
-                <td className={s.td}>{el}</td>
+              <tr key={category} className={s.tr}>
+                <td className={s.td}>{category}</td>
                 <td className={s.td}>
                   {
-                    filteredItems.filter(
-                      (item) => item.category === el && item.archive === false
-                    ).length
+                    filteredItems.filter((item: TodoItem) => !item.archive)
+                      .length
                   }
                 </td>
                 <td className={s.td}>
-                  {filteredItems.filter((item) => item.archive === true).length}
+                  {
+                    filteredItems.filter((item: TodoItem) => item.archive)
+                      .length
+                  }
                 </td>
               </tr>
             );

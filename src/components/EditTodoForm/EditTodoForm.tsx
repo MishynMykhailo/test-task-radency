@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import s from "./EditTodoForm.module.css";
 import { updateTodo } from "../../redux/todoSlice";
@@ -8,26 +8,39 @@ import {
 } from "../../redux/selectors";
 import { toggleModal } from "../../redux/modalSlice";
 
-function EditTodoForm({ idTodo }) {
+interface IProps {
+  idTodo: string;
+}
+interface TodoItemData {
+  id: string;
+  name: string;
+  created: string;
+  category: string;
+  content: string;
+  date: string[];
+  archive: boolean;
+}
+const EditTodoForm: React.FC<IProps> = ({ idTodo }) => {
   const { items } = useSelector(getTodoValueState);
   const { categoryList } = useSelector(getCategorySelectValueState);
   const { name, category, content, date, id } = items.find(
-    ({ id }) => id === idTodo
-  );
+    (item: TodoItemData) => item.id === idTodo
+  )!;
   const dispatch = useDispatch();
-  const [nameEdit, setNameEdit] = useState(name);
-  const [categoryEdit, setCategoryEdit] = useState(category);
-  const [contentEdit, setContentEdit] = useState(content);
-  const [dateEdit, setDateEdit] = useState(date);
+  const [nameEdit, setNameEdit] = useState<string>(name);
+  const [categoryEdit, setCategoryEdit] = useState<string>(category);
+  const [contentEdit, setContentEdit] = useState<string>(content);
+  const [dateEdit, setDateEdit] = useState<string[]>(date);
 
-  const handlerChange = (e) => {
+  const handlerChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ): void => {
     const { name, value } = e.target;
     switch (name) {
       case "name":
         setNameEdit(value);
         break;
       case "category":
-        console.log(category);
         setCategoryEdit(value);
         break;
       case "content":
@@ -36,12 +49,13 @@ function EditTodoForm({ idTodo }) {
       case "date":
         const [year, month, day] = value.split("-");
         setDateEdit((prevState) => {
-          return [...prevState, `${day}/${month}/${year}`];
+          return [...prevState, `${day}/${month}/${year}`]
         });
         break;
       default:
     }
   };
+
   return (
     <form
       onSubmit={(e) => {
@@ -49,10 +63,10 @@ function EditTodoForm({ idTodo }) {
         dispatch(
           updateTodo({
             id,
-            nameEdit,
-            categoryEdit,
-            contentEdit,
-            dateEdit,
+            name: nameEdit,
+            category: categoryEdit,
+            content: contentEdit,
+            date: dateEdit,
           })
         );
         dispatch(toggleModal());
@@ -62,7 +76,7 @@ function EditTodoForm({ idTodo }) {
       <label className={s.label}>
         <p>Name</p>
         <input
-          onChange={(e) => handlerChange(e)}
+          onChange={handlerChange}
           className={s.input}
           id="name"
           name="name"
@@ -78,26 +92,24 @@ function EditTodoForm({ idTodo }) {
           className={s.input}
           id="category"
           name="category"
-          onChange={(e) => handlerChange(e)}
+          onChange={handlerChange}
           required
           defaultValue="def"
         >
           <option value="def" disabled>
             Choose your category
           </option>
-          {categoryList.map((e) => {
-            return (
-              <option key={e} value={e} readOnly>
-                {e}
-              </option>
-            );
-          })}
+          {categoryList.map((category: string) => (
+            <option key={category} value={category}>
+              {category}
+            </option>
+          ))}
         </select>
       </label>
       <label className={s.label}>
         <p>Content</p>
         <input
-          onChange={(e) => handlerChange(e)}
+          onChange={handlerChange}
           className={s.input}
           id="content"
           name="content"
@@ -108,7 +120,7 @@ function EditTodoForm({ idTodo }) {
       <label className={s.label}>
         <p>Date</p>
         <input
-          onChange={(e) => handlerChange(e)}
+          onChange={handlerChange}
           className={s.input}
           id="date"
           name="date"
@@ -122,6 +134,6 @@ function EditTodoForm({ idTodo }) {
       </button>
     </form>
   );
-}
+};
 
 export default EditTodoForm;

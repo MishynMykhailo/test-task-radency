@@ -1,15 +1,19 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import s from "./Header.module.css";
 import AddTodoForm from "../AddTodoForm/AddTodoForm";
 import TodoList from "../TodoList/TodoList";
 import { toggleModal } from "../../redux/modalSlice";
-import { toggleArchivePage } from "../../redux/archivePage";
+import { toggleArchivePage } from "../../redux/archivePageSlice";
 import { getArchivePageValueState } from "../../redux/selectors";
 import { Archive, Case, Delete, Edit, Idea, Trophy } from "../../images";
 
-function Header({ setContentModal }) {
-  const todoImage = (category) => {
+interface IProps {
+  setContentModal: React.Dispatch<React.SetStateAction<ReactElement | null>>;
+}
+
+const Header: React.FC<IProps> = ({ setContentModal }) => {
+  const todoImage = (category: string) => {
     if (category === "Task") {
       return <Case />;
     } else if (category === "Random Thought") {
@@ -21,6 +25,7 @@ function Header({ setContentModal }) {
 
   const dispatch = useDispatch();
   const { archivePage } = useSelector(getArchivePageValueState);
+
   return (
     <>
       <div className={s.div}>
@@ -75,6 +80,6 @@ function Header({ setContentModal }) {
       </div>
     </>
   );
-}
+};
 
 export default Header;

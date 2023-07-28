@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Notify } from "notiflix/build/notiflix-notify-aio";
 import s from "./AddTodoForm.module.css";
@@ -16,15 +16,18 @@ Notify.init({
 
 function AddTodoForm() {
   const { categoryList } = useSelector(getCategorySelectValueState);
+
   const dispatch = useDispatch();
-  const [name, setName] = useState("");
-  const [category, setCategory] = useState("");
-  const [content, setContent] = useState("");
-  const [date, setDate] = useState([]);
-  const [archive, setArchive] = useState(Boolean);
-  const [edit, setEdit] = useState(Boolean);
-  // Change input in form
-  const handlerChange = (e) => {
+
+  const [name, setName] = useState<string>("");
+  const [category, setCategory] = useState<string>("");
+  const [content, setContent] = useState<string>("");
+  const [date, setDate] = useState<string[]>([]);
+  const [archive, setArchive] = useState<boolean>(false);
+
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     switch (name) {
       case "name":
@@ -41,35 +44,27 @@ function AddTodoForm() {
         setDate([`${day}/${month}/${year}`]);
         break;
       case "archive":
-        setArchive(value);
+        setArchive(Boolean(value));
         break;
-      case "edit":
-        setEdit(value);
-        break;
+
       default:
     }
   };
 
-  const validForm = ({ name, category }) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (name.length <= 0) {
-      return Notify.failure("fill in the field 'Name'");
+      Notify.failure("Заполните поле 'Name'");
     } else if (category.length <= 0) {
-      return Notify.failure("fill in the field 'Category'");
+      Notify.failure("Заполните поле 'Category'");
     } else {
-      dispatch(addTodo({ name, category, content, date, archive, edit }));
+      dispatch(addTodo({ name, category, content, date, archive }));
       dispatch(toggleModal());
     }
   };
-  
+
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        validForm({ name, category, content });
-      }}
-      onChange={(e) => handlerChange(e)}
-      className={s.form}
-    >
+    <form onSubmit={handleSubmit} className={s.form}>
       <label className={s.label}>
         <p>Name</p>
         <input
@@ -78,6 +73,7 @@ function AddTodoForm() {
           name="name"
           required
           placeholder="Name"
+          onChange={handleChange}
         />
       </label>
 
@@ -89,14 +85,15 @@ function AddTodoForm() {
           name="category"
           required
           defaultValue="def"
+          onChange={handleChange}
         >
           <option value="def" disabled>
-            Choose your category
+            Выберите категорию
           </option>
-          {categoryList.map((e) => {
+          {categoryList.map((category: string) => {
             return (
-              <option key={e} value={e}>
-                {e}
+              <option key={category} value={category}>
+                {category}
               </option>
             );
           })}
@@ -108,7 +105,8 @@ function AddTodoForm() {
           className={s.input}
           id="content"
           name="content"
-          placeholder="Description"
+          placeholder="Описание"
+          onChange={handleChange}
         />
       </label>
       <label className={s.label}>
@@ -120,10 +118,11 @@ function AddTodoForm() {
           type="date"
           min={`1930-01-01`}
           max={`3000-12-31`}
+          onChange={handleChange}
         />
       </label>
       <button className={s.btn} type="submit">
-        Submit
+        Добавить
       </button>
     </form>
   );

@@ -1,11 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-
 import { modalReducer } from "./modalSlice";
-import { categoryReducer } from "./categoryReducer";
-import { archivePageReducer } from "./archivePage";
+import { categoryReducer } from "./categorySlice";
+import { archivePageReducer } from "./archivePageSlice";
 import { todoReducer } from "./todoSlice";
-// Начальное значение состояния Redux для корневого редюсера,
-// если не передать параметр preloadedState.
+
+
 
 export const store = configureStore({
   reducer: {

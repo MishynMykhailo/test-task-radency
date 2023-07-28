@@ -1,10 +1,15 @@
 import { createPortal } from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { ReactNode } from "react"; // Импортируем ReactNode
 import s from "./Modal.module.css";
 import { toggleModal } from "../../redux/modalSlice";
 import { getModalValueState } from "../../redux/selectors";
 
-export default function Modal({ children }) {
+interface ModalProps {
+  children: ReactNode; // Указываем тип для children
+}
+
+const Modal: React.FC<ModalProps> = ({ children }) => {
   const { modalActive } = useSelector(getModalValueState);
   const dispatch = useDispatch();
   return (
@@ -28,4 +33,6 @@ export default function Modal({ children }) {
         )}
     </>
   );
-}
+};
+
+export default Modal;

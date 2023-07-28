@@ -1,11 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
-// import {} from "./operations";
+
+interface CategorySelectState {
+  categoryList: string[];
+}
+
+const initialState: CategorySelectState = {
+  categoryList: ["Task", "Random Thought", "Idea"],
+};
 
 const categorySlice = createSlice({
   name: "categorySelect",
-  initialState: {
-    categoryList: ["Task", "Random Thought", "Idea"],
-  },
+  initialState,
   reducers: {},
 });
 

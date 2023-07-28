@@ -1,19 +1,27 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+interface ArchivePageState {
+  archivePage: boolean;
+}
+
+const initialState: ArchivePageState = {
+  archivePage: false,
+};
 
 const archivePageSlice = createSlice({
   name: "archivePage",
-  initialState: {
-    archivePage: false,
-  },
+  initialState,
   reducers: {
     toggleArchivePage: {
-      reducer(state, _) {
+      reducer(state) {
         state.archivePage = !state.archivePage;
+      },
+      prepare() {
+        return { payload: {} };
       },
     },
   },
 });
-export const { toggleArchivePage } = archivePageSlice.actions;
 
+export const { toggleArchivePage } = archivePageSlice.actions;
 export const archivePageReducer = archivePageSlice.reducer;
