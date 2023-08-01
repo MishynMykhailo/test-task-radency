@@ -1,7 +1,6 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Notify } from "notiflix/build/notiflix-notify-aio";
-import s from "./AddTodoForm.module.css";
 import { getCategorySelectValueState } from "../../redux/selectors";
 import { addTodo } from "../../redux/todoSlice";
 import { toggleModal } from "../../redux/modalSlice";
@@ -26,7 +25,7 @@ function AddTodoForm() {
   const [archive, setArchive] = useState<boolean>(false);
 
   const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
     switch (name) {
@@ -64,11 +63,11 @@ function AddTodoForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className={s.form}>
-      <label className={s.label}>
-        <p>Name</p>
+    <form onSubmit={handleSubmit} className="flex flex-col">
+      <label className="mb-4">
+        <p className="text-sm font-semibold text-gray-600">Name</p>
         <input
-          className={s.input}
+          className="mb-4 w-full rounded-md border border-gray-300 p-2 focus:border-blue-300 focus:outline-none focus:ring"
           id="name"
           name="name"
           required
@@ -77,10 +76,10 @@ function AddTodoForm() {
         />
       </label>
 
-      <label className={s.label}>
-        <p>Category</p>
+      <label className="mb-4">
+        <p className="text-sm font-semibold text-gray-600">Category</p>
         <select
-          className={s.input}
+          className="mb-4 w-full rounded-md border border-gray-300 p-2 focus:border-blue-300 focus:outline-none focus:ring"
           id="category"
           name="category"
           required
@@ -99,20 +98,22 @@ function AddTodoForm() {
           })}
         </select>
       </label>
-      <label className={s.label}>
-        <p>Content</p>
+
+      <label className="mb-4">
+        <p className="text-sm font-semibold text-gray-600">Content</p>
         <input
-          className={s.input}
+          className="mb-4 w-full rounded-md border border-gray-300 p-2 focus:border-blue-300 focus:outline-none focus:ring"
           id="content"
           name="content"
           placeholder="Описание"
           onChange={handleChange}
         />
       </label>
-      <label className={s.label}>
-        <p>Date</p>
+
+      <label className="mb-4">
+        <p className="text-sm font-semibold text-gray-600">Date</p>
         <input
-          className={s.input}
+          className="mb-4 w-full rounded-md border border-gray-300 p-2 focus:border-blue-300 focus:outline-none focus:ring"
           id="date"
           name="date"
           type="date"
@@ -121,7 +122,11 @@ function AddTodoForm() {
           onChange={handleChange}
         />
       </label>
-      <button className={s.btn} type="submit">
+
+      <button
+        className="duration-250 rounded-lg border-none bg-green-600 p-2 font-semibold uppercase text-white transition ease-in-out hover:bg-green-700 focus:bg-green-700"
+        type="submit"
+      >
         Добавить
       </button>
     </form>

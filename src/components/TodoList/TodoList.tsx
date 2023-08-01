@@ -1,8 +1,5 @@
-// TodoList.tsx
-
 import React, { ReactElement } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import s from "./TodoList.module.css";
 import EditTodoForm from "../EditTodoForm/EditTodoForm";
 import { Archive, Delete, Edit } from "../../images";
 import { deleteTodo, toggleArchive } from "../../redux/todoSlice";
@@ -40,18 +37,21 @@ const TodoList: React.FC<TodoListProps> = ({ todoImage, setContentModal }) => {
     <>
       {filteredItems.map(
         ({ id, name, created, category, content, date }: TodoItem) => (
-          <tr key={id} className={s.tr}>
-            <td className={s.td}>
-              <span className={s.containerForName}>
-                <span className={s.containerImg}>{todoImage(category)}</span>
-                <p className={s.containerP}>{name}</p>
+          <tr key={id} className="odd:bg-red-100 even:bg-red-200 text-center">
+            <td className="p-2">
+              <span className="flex">
+                <span className="mr-2">{todoImage(category)}</span>
+                <p>{name}</p>
               </span>
             </td>
-            <td className={s.td}>{created}</td>
-            <td className={s.td}>{category}</td>
-            <td className={s.td}>{content}</td>
-            <td className={s.td}>
-              <select className={s.select} value={date[date.length - 1]}>
+            <td className="p-2">{created}</td>
+            <td className="p-2">{category}</td>
+            <td className="p-2">{content}</td>
+            <td className="p-2">
+              <select
+                value={date[date.length - 1]}
+                className="bg-transparent outline-none"
+              >
                 {date
                   .slice()
                   .reverse()
@@ -60,10 +60,10 @@ const TodoList: React.FC<TodoListProps> = ({ todoImage, setContentModal }) => {
                   ))}
               </select>
             </td>
-            <td className={s.td}>
+            <td className="justify-center p-4 text-center">
               <button
+                className="fill-current hover:text-red-500"
                 type="button"
-                className={s.btn}
                 onClick={() => {
                   dispatch(toggleModal());
                   setContentModal(<EditTodoForm idTodo={id} />);
@@ -72,26 +72,22 @@ const TodoList: React.FC<TodoListProps> = ({ todoImage, setContentModal }) => {
                 <Edit />
               </button>
             </td>
-            <td className={s.td}>
+            <td className="justify-center p-4 text-center">
+              
               <button
-                type="button"
-                className={s.btn}
-                onClick={() => dispatch(toggleArchive(id))}
-              >
+                   className="fill-current hover:text-red-500" type="button" onClick={() => dispatch(toggleArchive(id))}>
                 <Archive />
               </button>
             </td>
-            <td className={s.td}>
-              <button
-                type="button"
-                className={s.btn}
-                onClick={() => dispatch(deleteTodo(id))}
-              >
+            <td className="justify-center p-4 text-center">
+              
+              <button 
+                   className="fill-current hover:text-red-500"type="button" onClick={() => dispatch(deleteTodo(id))}>
                 <Delete />
               </button>
             </td>
           </tr>
-        )
+        ),
       )}
     </>
   );
