@@ -1,7 +1,7 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { useSelector } from "react-redux";
-import s from "./StatisticsTodo.module.css";
 import {
+  getArchivePageValueState,
   getCategorySelectValueState,
   getTodoValueState,
 } from "../../redux/selectors";
@@ -15,36 +15,42 @@ interface TodoItem {
   date: string[];
   archive: boolean;
 }
-
-function StatisticsTodo() {
+interface IProps {
+  todoImage: (category: string) => ReactElement;
+}
+const StatisticsTodo: React.FC<IProps> = ({ todoImage }) => {
   const { items } = useSelector(getTodoValueState);
   const { categoryList } = useSelector(getCategorySelectValueState);
+  const { archivePage } = useSelector(getArchivePageValueState);
 
   return (
-    <table className={s.table}>
-      <thead className={s.thead}>
-        <tr className={s.tr}>
-          <th className={s.th}>Note Category</th>
-          <th className={s.th}>Active</th>
-          <th className={s.th}>Archived</th>
+    <table>
+      <thead className={archivePage ? "bg-gray-500" : "bg-red-500 "}>
+        <tr className="text-white">
+          <th className="p-4">Note Category</th>
+          <th className="p-4">Active</th>
+          <th className="p-4">Archived</th>
         </tr>
       </thead>
       <tbody>
         {items &&
           categoryList.map((category: string) => {
             const filteredItems = items.filter(
-              (item: TodoItem) => item.category === category
+              (item: TodoItem) => item.category === category,
             );
             return (
-              <tr key={category} className={s.tr}>
-                <td className={s.td}>{category}</td>
-                <td className={s.td}>
+              <tr key={category} className="odd:bg-rose-50 even:bg-rose-100">
+                <td className="flex p-2">
+                  <span className="mr-2">{todoImage(category)}</span>
+                  <span>{category}</span>
+                </td>
+                <td className="text-center">
                   {
                     filteredItems.filter((item: TodoItem) => !item.archive)
                       .length
                   }
                 </td>
-                <td className={s.td}>
+                <td className="text-center">
                   {
                     filteredItems.filter((item: TodoItem) => item.archive)
                       .length
@@ -56,6 +62,6 @@ function StatisticsTodo() {
       </tbody>
     </table>
   );
-}
+};
 
 export default StatisticsTodo;
